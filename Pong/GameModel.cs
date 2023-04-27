@@ -12,38 +12,41 @@ namespace Pong
 {
     class GameModel
     {
-        private readonly RenderTarget2D _renderTarget;
 
         private List<GameObject> _removeThese = new();
         private List<GameObject> _addThese = new();
 
-
         private Systems.Renderer _renderer;
 
-        public GameModel(RenderTarget2D renderTarget)
+        public GameModel()
         {
-            _renderTarget = renderTarget;
         }
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
         {
-            // TODO create background texture and load it in
-
             Dictionary<string, Texture2D> textures = new()
             {
-                { "background", content.Load<Texture2D>("Sprites/background") },
-                { "square", content.Load<Texture2D>("Sprites/Square") },
-                { "net", content.Load<Texture2D>("Sprites/Net") },
+                { "background", content.Load<Texture2D>("Sprites/Background") },
             };
 
 
-            _renderer = new Systems.Renderer(_renderTarget, spriteBatch, textures);
-
+            _renderer = new Systems.Renderer(spriteBatch);
+            InitializeBackground(textures["background"]);
         }
 
         public void Update(GameTime gameTime)
         {
+            foreach (GameObject gameObject in _removeThese)
+            {
+                RemoveGameObject(gameObject);
+            }
+            _removeThese.Clear();
 
+            foreach (GameObject gameObject in _addThese)
+            {
+                AddGameObject(gameObject);
+            }
+            _addThese.Clear();
         }
 
         public void Draw(GameTime gameTime)
@@ -53,12 +56,20 @@ namespace Pong
 
         private void AddGameObject(GameObject gameObject)
         {
-
+            _renderer.Add(gameObject);
         }
 
         private void RemoveGameObject(GameObject gameObject)
         {
+            _renderer.Remove(gameObject.Id);
+        }
 
+        private void InitializeBackground(Texture2D backgroundTexture)
+        {
+            GameObject background = new();
+            background.Add(new Components.Sprite(backgroundTexture));
+            background.Add(new Components.Position(0, 0));
+            AddGameObject(background);
         }
 
         private void InitializePlayerOne(Texture2D playerTexture)

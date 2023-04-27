@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Entities;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -11,34 +12,31 @@ namespace Systems
 {
     class Renderer : System
     {
-        RenderTarget2D _renderTarget;
         private readonly SpriteBatch _spriteBatch;
-        private readonly Texture2D _backgroundTexture;
-        private readonly Texture2D _squareTexture;
-        private readonly Texture2D _netTexture;
 
 
-        const int NUMBER_OF_BRICKS_FOR_NET = 11;
 
-        public Renderer(RenderTarget2D renderTarget, SpriteBatch spriteBatch, Dictionary<string, Texture2D> textures) :
+
+        public Renderer(SpriteBatch spriteBatch) :
             base(typeof(Components.Sprite), typeof(Components.Position))
         {
-            _renderTarget = renderTarget;
             _spriteBatch = spriteBatch;
-            _backgroundTexture = textures["background"];
-            _squareTexture = textures["square"];
-            _netTexture = textures["net"];
         }
         public override void Update(GameTime gameTime)
         {
-            _spriteBatch.Draw(_backgroundTexture, new Rectangle(0, 0, _renderTarget.Width, _renderTarget.Height), Color.White);
-            // Draw center net
-            for (int i = 0; i < NUMBER_OF_BRICKS_FOR_NET; i++)
-            {
-                _spriteBatch.Draw(_netTexture, new Vector2(_renderTarget.Width/2, i * (_squareTexture.Height + 8) + 8), Color.White);
-            }
-
             // Foreach entity draw them
+            foreach (GameObject gameObject in _gameObjects.Values)
+            {
+                RenderGameObject(gameObject);
+            }
+        }
+
+        private void RenderGameObject(GameObject gameObject)
+        {
+            Components.Sprite sprite = gameObject.GetComponent<Components.Sprite>();
+            Components.Position position = gameObject.GetComponent<Components.Position>();
+
+            _spriteBatch.Draw(sprite.Texture, new Vector2(position.X, position.Y), Color.White);
         }
     }
 }
