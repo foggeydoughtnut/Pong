@@ -32,7 +32,8 @@ namespace Pong
             Dictionary<string, Texture2D> textures = new()
             {
                 { "background", content.Load<Texture2D>("Sprites/background") },
-                { "square", content.Load<Texture2D>("Sprites/Square") }
+                { "square", content.Load<Texture2D>("Sprites/Square") },
+                { "net", content.Load<Texture2D>("Sprites/Net") },
             };
 
 

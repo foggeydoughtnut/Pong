@@ -15,9 +15,10 @@ namespace Systems
         private readonly SpriteBatch _spriteBatch;
         private readonly Texture2D _backgroundTexture;
         private readonly Texture2D _squareTexture;
+        private readonly Texture2D _netTexture;
 
 
-        const int NUMBER_OF_BRICKS_FOR_NET = 40;
+        const int NUMBER_OF_BRICKS_FOR_NET = 11;
 
         public Renderer(RenderTarget2D renderTarget, SpriteBatch spriteBatch, Dictionary<string, Texture2D> textures) :
             base(typeof(Components.Sprite), typeof(Components.Position))
@@ -26,6 +27,7 @@ namespace Systems
             _spriteBatch = spriteBatch;
             _backgroundTexture = textures["background"];
             _squareTexture = textures["square"];
+            _netTexture = textures["net"];
         }
         public override void Update(GameTime gameTime)
         {
@@ -33,7 +35,7 @@ namespace Systems
             // Draw center net
             for (int i = 0; i < NUMBER_OF_BRICKS_FOR_NET; i++)
             {
-                _spriteBatch.Draw(_squareTexture, new Vector2(_renderTarget.Width/2, (i * _squareTexture.Height) + 8), Color.White);
+                _spriteBatch.Draw(_netTexture, new Vector2(_renderTarget.Width/2, i * (_squareTexture.Height + 8) + 8), Color.White);
             }
 
             // Foreach entity draw them
