@@ -17,6 +17,9 @@ namespace Pong.Views
         KeyboardState previousKeyboardState;
         RenderTarget2D renderTarget;
 
+        ContentManager _content;
+        private GameModel _gameModel;
+
 
         public override void Initialize(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics, GameWindow window)
         {
@@ -33,9 +36,16 @@ namespace Pong.Views
             );
         }
 
+        public override void InitializeSession()
+        {
+            _gameModel = new GameModel(renderTarget);
+            _gameModel.Initialize(_content, _spriteBatch);
+        }
+
         public override void LoadContent(ContentManager contentManager)
         {
             _font = contentManager.Load<SpriteFont>("Fonts/MenuText");
+            _content = contentManager;
         }
 
         public override GameStateEnum ProcessInput(GameTime gameTime)
@@ -58,9 +68,10 @@ namespace Pong.Views
             _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
 
-            Vector2 stringSize = _font.MeasureString(MESSAGE);
-            _spriteBatch.DrawString(_font, MESSAGE,
-                new Vector2(renderTarget.Width / 2 - stringSize.X / 2, renderTarget.Height / 2 - stringSize.Y), Color.Yellow);
+            /*            Vector2 stringSize = _font.MeasureString(MESSAGE);
+                        _spriteBatch.DrawString(_font, MESSAGE,
+                            new Vector2(renderTarget.Width / 2 - stringSize.X / 2, renderTarget.Height / 2 - stringSize.Y), Color.Yellow);*/
+            
 
             _spriteBatch.End();
             _graphics.GraphicsDevice.SetRenderTarget(null);
