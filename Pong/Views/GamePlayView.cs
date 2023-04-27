@@ -24,10 +24,10 @@ namespace Pong.Views
         public override void Initialize(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics, GameWindow window)
         {
             base.Initialize(graphicsDevice, graphics, window);
-            renderTarget = new RenderTarget2D( // TODO change this so it is a size that is what I want for the game world
+            renderTarget = new RenderTarget2D(
                 _graphics.GraphicsDevice,
-                640,
-                480,
+                360,
+                270,
                 false,
                 SurfaceFormat.Color,
                 DepthFormat.None,
@@ -68,10 +68,7 @@ namespace Pong.Views
             _graphics.GraphicsDevice.Clear(Color.CornflowerBlue);
             _spriteBatch.Begin(SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp);
 
-            /*            Vector2 stringSize = _font.MeasureString(MESSAGE);
-                        _spriteBatch.DrawString(_font, MESSAGE,
-                            new Vector2(renderTarget.Width / 2 - stringSize.X / 2, renderTarget.Height / 2 - stringSize.Y), Color.Yellow);*/
-            
+            _gameModel.Draw(gameTime);
 
             _spriteBatch.End();
             _graphics.GraphicsDevice.SetRenderTarget(null);
@@ -93,6 +90,7 @@ namespace Pong.Views
 
         public override void Update(GameTime gameTime)
         {
+            _gameModel.Update(gameTime);
         }
     }
 }

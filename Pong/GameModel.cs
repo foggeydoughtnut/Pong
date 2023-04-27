@@ -17,6 +17,7 @@ namespace Pong
         private List<GameObject> _removeThese = new();
         private List<GameObject> _addThese = new();
 
+
         private Systems.Renderer _renderer;
 
         public GameModel(RenderTarget2D renderTarget)
@@ -27,6 +28,16 @@ namespace Pong
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
         {
             // TODO create background texture and load it in
+
+            Dictionary<string, Texture2D> textures = new()
+            {
+                { "background", content.Load<Texture2D>("Sprites/background") },
+                { "square", content.Load<Texture2D>("Sprites/Square") }
+            };
+
+
+            _renderer = new Systems.Renderer(_renderTarget, spriteBatch, textures);
+
         }
 
         public void Update(GameTime gameTime)
@@ -36,7 +47,7 @@ namespace Pong
 
         public void Draw(GameTime gameTime)
         {
-
+            _renderer.Update(gameTime);
         }
 
         private void AddGameObject(GameObject gameObject)
