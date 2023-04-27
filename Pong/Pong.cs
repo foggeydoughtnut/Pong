@@ -1,13 +1,17 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Pong.Views;
+using System.Collections.Generic;
 
 namespace Pong
 {
     public class Pong : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private IGameState _currentState;
+        private GameStateEnum _nextStateEnum = GameStateEnum.MainMenu;
+        private Dictionary<GameStateEnum, IGameState> _states;
 
         public Pong()
         {
@@ -19,23 +23,40 @@ namespace Pong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            _graphics.PreferredBackBufferWidth = 1280;
+            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.ApplyChanges();
+            Window.AllowUserResizing = true;
+
+            _states = new()
+            {
+                { GameStateEnum.MainMenu, new MainMenuView() },
+                { GameStateEnum.GamePlay, new GamePlayView() },
+                { GameStateEnum.Controls, new ControlsView() }
+            };
+
+            _currentState = _states[GameStateEnum.MainMenu];
 
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
+            foreach (KeyValuePair<GameStateEnum, IGameState> item in _states)
+            {
+                item.Value.Initialize(GraphicsDevice, _graphics, Window);
+                item.Value.LoadContent(Content);
+            }
         }
 
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            _nextStateEnum = _currentState.ProcessInput(gameTime);
+            if (_nextStateEnum == GameStateEnum.Exit)
+            {
                 Exit();
-
-            // TODO: Add your update logic here
+            }
+            _currentState.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -44,7 +65,12 @@ namespace Pong
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            _currentState.Render(gameTime);
+            if (_currentState != _states[_nextStateEnum])
+            {
+                _currentState = _states[_nextStateEnum];
+                _currentState.InitializeSession();
+            }
 
             base.Draw(gameTime);
         }
