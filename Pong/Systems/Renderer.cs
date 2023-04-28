@@ -18,7 +18,7 @@ namespace Systems
 
 
         public Renderer(SpriteBatch spriteBatch) :
-            base(typeof(Components.Sprite), typeof(Components.Position))
+            base(typeof(Components.Sprite), typeof(Components.Transform))
         {
             _spriteBatch = spriteBatch;
         }
@@ -34,9 +34,9 @@ namespace Systems
         private void RenderGameObject(GameObject gameObject)
         {
             Components.Sprite sprite = gameObject.GetComponent<Components.Sprite>();
-            Components.Position position = gameObject.GetComponent<Components.Position>();
+            Components.Transform transform = gameObject.GetComponent<Components.Transform>();
 
-            _spriteBatch.Draw(sprite.Texture, new Vector2(position.X, position.Y), Color.White);
+            _spriteBatch.Draw(sprite.Texture, new Vector2(transform.Position.X, transform.Position.Y), null, Color.White, 0f, sprite.Origin, 1f, SpriteEffects.None, sprite.RenderDepth);
         }
     }
 }

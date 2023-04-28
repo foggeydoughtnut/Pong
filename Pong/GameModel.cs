@@ -1,9 +1,12 @@
-﻿using Entities;
+﻿using Components;
+using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,14 +15,19 @@ namespace Pong
 {
     class GameModel
     {
+        RenderTarget2D _renderTarget;
 
         private List<GameObject> _removeThese = new();
         private List<GameObject> _addThese = new();
 
         private Systems.Renderer _renderer;
+        private Systems.InputSystem _inputSystem;
+        private Systems.MovementSystem _movementSystem;
+        private Systems.PhysicsSystem _physicsSystem;
 
-        public GameModel()
+        public GameModel(RenderTarget2D renderTarget)
         {
+            _renderTarget = renderTarget;
         }
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
@@ -27,15 +35,29 @@ namespace Pong
             Dictionary<string, Texture2D> textures = new()
             {
                 { "background", content.Load<Texture2D>("Sprites/Background") },
+                { "player", content.Load<Texture2D>("Sprites/Player") },
+
             };
 
 
-            _renderer = new Systems.Renderer(spriteBatch);
+            _renderer = new(spriteBatch);
+            _inputSystem = new();
+            _movementSystem = new();
+            _physicsSystem = new();
+
+
             InitializeBackground(textures["background"]);
+            InitializePlayerOne(textures["player"]);
+            InitializePlayerTwo(textures["player"]);
+
         }
 
         public void Update(GameTime gameTime)
         {
+            _inputSystem.Update(gameTime);
+            _movementSystem.Update(gameTime);
+            _physicsSystem.Update(gameTime);
+
             foreach (GameObject gameObject in _removeThese)
             {
                 RemoveGameObject(gameObject);
@@ -57,24 +79,51 @@ namespace Pong
         private void AddGameObject(GameObject gameObject)
         {
             _renderer.Add(gameObject);
+            _inputSystem.Add(gameObject);
+            _movementSystem.Add(gameObject);
+            _physicsSystem.Add(gameObject);
         }
 
         private void RemoveGameObject(GameObject gameObject)
         {
             _renderer.Remove(gameObject.Id);
+            _inputSystem.Remove(gameObject.Id);
+            _movementSystem.Remove(gameObject.Id);
+            _physicsSystem.Remove(gameObject.Id);
         }
 
         private void InitializeBackground(Texture2D backgroundTexture)
         {
             GameObject background = new();
-            background.Add(new Components.Sprite(backgroundTexture));
-            background.Add(new Components.Position(0, 0));
+            background.Add(new Components.Sprite(backgroundTexture, Vector2.Zero));
+            background.Add(new Components.Transform(0, 0));
             AddGameObject(background);
         }
 
         private void InitializePlayerOne(Texture2D playerTexture)
         {
+            // TODO read this from a json file
+            Dictionary<string, Keys> controls = new()
+            {
+                {"up", Keys.W },
+                {"down", Keys.S },
+            };
+            
+            GameObject player1 = Player.Create(playerTexture, _renderTarget.Width / 8, _renderTarget.Height / 2, controls);
+            AddGameObject(player1);
+        }
 
+        private void InitializePlayerTwo(Texture2D playerTexture)
+        {
+            // TODO read this from a json file
+            Dictionary<string, Keys> controls = new()
+            {
+                {"up", Keys.Up },
+                {"down", Keys.Down },
+            };
+
+            GameObject player2 = Player.Create(playerTexture, 7 * _renderTarget.Width / 8, _renderTarget.Height / 2, controls);
+            AddGameObject(player2);
         }
 
         private void InitializeBall(Texture2D ballTexture)

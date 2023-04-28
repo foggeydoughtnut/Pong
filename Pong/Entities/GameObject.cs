@@ -32,6 +32,25 @@ namespace Entities
             return ContainsComponent(typeof(TComponent));
         }
 
+        public bool ContainsComponentOfParentType(Type type)
+        {
+            foreach (Type component in components.Keys)
+            {
+                if (type.IsAssignableFrom(component))
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public bool ContainsComponentOfParentType<TComponent>()
+            where TComponent : Component
+        {
+            return ContainsComponentOfParentType(typeof(TComponent));
+        }
+
         public void Add(params Component[] newComponents)
         {
             Debug.Assert(components != null, "List of components can't be null");

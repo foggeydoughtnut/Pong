@@ -38,7 +38,7 @@ namespace Pong.Views
 
         public override void InitializeSession()
         {
-            _gameModel = new();
+            _gameModel = new(renderTarget);
             _gameModel.Initialize(_content, _spriteBatch);
         }
 
