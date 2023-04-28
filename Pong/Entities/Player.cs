@@ -15,7 +15,7 @@ namespace Entities
         public static GameObject Create(Texture2D texture, int x, int y, Dictionary<string, Keys> controls, ushort playerNum)
         {
             float speed = 200f;
-            GameObject player = new();
+            GameObject player = new($"Player{playerNum}");
             player.Add(new Components.Sprite(texture));
             player.Add(new Components.Transform(x, y));
             player.Add(new Components.Rigidbody(Vector2.Zero, speed));

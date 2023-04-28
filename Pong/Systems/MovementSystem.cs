@@ -94,11 +94,11 @@ namespace Systems
                 SetRegularizer(i+1);
                 SetRegularizer(i+1);
                 
-                if (i+1 == 1)
+                if (gameObject.Name == "Player1")
                 {
                     rb.Direction = new Vector2(Math.Clamp(regularizerX1 * xDirection1, -regularizerX1, regularizerX1), Math.Clamp(regularizerY1 * yDirection1, -regularizerY1, regularizerY1));
                 }
-                if (i+1 == 2)
+                if (gameObject.Name == "Player2")
                 {
                     rb.Direction = new Vector2(Math.Clamp(regularizerX2 * xDirection2, -regularizerX2, regularizerX2), Math.Clamp(regularizerY2 * yDirection2, -regularizerY2, regularizerY2));
                 }

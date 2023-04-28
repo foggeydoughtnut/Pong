@@ -13,12 +13,20 @@ namespace Entities
         private readonly Dictionary<Type, Component> components = new();
 
         private static uint _nextId = 0;
+        
 
         public GameObject() 
         {
             Id = _nextId++;
         }
 
+        public GameObject(string name)
+        {
+            Id = _nextId++;
+            Name = name;
+        }
+
+        public string Name { get; private set; }
         public uint Id { get; private set; }
 
         public bool ContainsComponent(Type type)

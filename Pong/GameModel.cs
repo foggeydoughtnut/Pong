@@ -48,9 +48,8 @@ namespace Pong
 
             InitializeBackground(textures["background"]);
 
-            // This order is important
-            InitializePlayerOne(textures["player"]);
             InitializePlayerTwo(textures["player"]);
+            InitializePlayerOne(textures["player"]);
 
         }
 
