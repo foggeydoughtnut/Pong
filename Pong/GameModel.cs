@@ -36,6 +36,8 @@ namespace Pong
             {
                 { "background", content.Load<Texture2D>("Sprites/Background") },
                 { "player", content.Load<Texture2D>("Sprites/Player") },
+                { "roof", content.Load<Texture2D>("Sprites/Roof") },
+                { "floor", content.Load<Texture2D>("Sprites/floor") },
 
             };
 
@@ -47,6 +49,8 @@ namespace Pong
 
 
             InitializeBackground(textures["background"]);
+            InitializeRoof(textures["roof"]);
+            InitializeFloor(textures["floor"]);
 
             InitializePlayerTwo(textures["player"]);
             InitializePlayerOne(textures["player"]);
@@ -99,6 +103,21 @@ namespace Pong
             background.Add(new Components.Sprite(backgroundTexture, Vector2.Zero));
             background.Add(new Components.Transform(0, 0));
             AddGameObject(background);
+        }
+
+        private void InitializeRoof(Texture2D roofTexture)
+        {
+            GameObject roof = new();
+            roof.Add(new Components.Sprite(roofTexture, Vector2.Zero));
+            roof.Add(new Components.Transform(0, -6));
+            AddGameObject(roof);
+        }
+        private void InitializeFloor(Texture2D floorTexture)
+        {
+            GameObject floor = new();
+            floor.Add(new Components.Sprite(floorTexture, Vector2.Zero));
+            floor.Add(new Components.Transform(0, _renderTarget.Height-10));
+            AddGameObject(floor);
         }
 
         private void InitializePlayerOne(Texture2D playerTexture)
