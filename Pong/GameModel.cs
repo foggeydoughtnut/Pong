@@ -47,6 +47,8 @@ namespace Pong
 
 
             InitializeBackground(textures["background"]);
+
+            // This order is important
             InitializePlayerOne(textures["player"]);
             InitializePlayerTwo(textures["player"]);
 
@@ -109,7 +111,7 @@ namespace Pong
                 {"down", Keys.S },
             };
             
-            GameObject player1 = Player.Create(playerTexture, _renderTarget.Width / 8, _renderTarget.Height / 2, controls);
+            GameObject player1 = Player.Create(playerTexture, _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 1);
             AddGameObject(player1);
         }
 
@@ -122,7 +124,7 @@ namespace Pong
                 {"down", Keys.Down },
             };
 
-            GameObject player2 = Player.Create(playerTexture, 7 * _renderTarget.Width / 8, _renderTarget.Height / 2, controls);
+            GameObject player2 = Player.Create(playerTexture, 7 * _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 2);
             AddGameObject(player2);
         }
 

@@ -12,7 +12,7 @@ namespace Entities
 {
     public class Player
     {
-        public static GameObject Create(Texture2D texture, int x, int y, Dictionary<string, Keys> controls)
+        public static GameObject Create(Texture2D texture, int x, int y, Dictionary<string, Keys> controls, ushort playerNum)
         {
             float speed = 200f;
             GameObject player = new();
@@ -21,8 +21,8 @@ namespace Entities
             player.Add(new Components.Rigidbody(Vector2.Zero, speed));
 
             KeyboardInput keyboardInput = new();
-            keyboardInput.actionKeyPairs.Add("MoveUp", controls["up"]);
-            keyboardInput.actionKeyPairs.Add("MoveDown", controls["down"]);
+            keyboardInput.actionKeyPairs.Add($"MoveUp{playerNum}", controls["up"]);
+            keyboardInput.actionKeyPairs.Add($"MoveDown{playerNum}", controls["down"]);
 
             player.Add(keyboardInput);
 
