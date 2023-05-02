@@ -37,6 +37,7 @@ namespace Pong
 
             _currentState = _states[GameStateEnum.MainMenu];
 
+            TextureCreation.device = _graphics.GraphicsDevice;
             base.Initialize();
         }
 

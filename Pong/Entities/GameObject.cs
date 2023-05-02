@@ -123,7 +123,8 @@ namespace Entities
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
         {
-            Debug.Assert(components.ContainsKey(typeof(TComponent)), $"Component of type {typeof(TComponent)} is not a part of this gameObject");
+            //Debug.Assert(components.ContainsKey(typeof(TComponent)), $"Component of type {typeof(TComponent)} is not a part of this gameObject");
+            if (!components.ContainsKey(typeof(TComponent))) return null;
             return (TComponent)components[typeof(TComponent)];
         }
 

@@ -19,6 +19,7 @@ namespace Entities
             player.Add(new Components.Sprite(texture));
             player.Add(new Components.Transform(x, y));
             player.Add(new Components.Rigidbody(Vector2.Zero, speed));
+            player.Add(new Components.BoxCollider(new Point(x - 4, y - texture.Height/2), new Point(8, texture.Height)));
 
             KeyboardInput keyboardInput = new();
             keyboardInput.actionKeyPairs.Add($"MoveUp{playerNum}", controls["up"]);

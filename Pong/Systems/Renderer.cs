@@ -1,6 +1,8 @@
-﻿using Entities;
+﻿using Components;
+using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Pong;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +16,7 @@ namespace Systems
     {
         private readonly SpriteBatch _spriteBatch;
 
+        public bool DEBUG_MODE = true;
 
 
 
@@ -28,6 +31,17 @@ namespace Systems
             foreach (GameObject gameObject in _gameObjects.Values)
             {
                 RenderGameObject(gameObject);
+
+                if (DEBUG_MODE)
+                {
+                    BoxCollider boxCollider = gameObject.GetComponent<BoxCollider>();
+
+                    if (boxCollider != null)
+                    {
+                        Texture2D texture = TextureCreation.CreateTexture(boxCollider.Collider.Width, boxCollider.Collider.Height);
+                        _spriteBatch.Draw(texture, boxCollider.Collider, Color.White);
+                    }
+                }
             }
         }
 

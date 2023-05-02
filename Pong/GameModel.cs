@@ -107,16 +107,21 @@ namespace Pong
 
         private void InitializeRoof(Texture2D roofTexture)
         {
-            GameObject roof = new();
+            GameObject roof = new("border");
             roof.Add(new Components.Sprite(roofTexture, Vector2.Zero));
             roof.Add(new Components.Transform(0, -6));
+            roof.Add(new Components.Rigidbody(Vector2.Zero, 0f));
+            roof.Add(new Components.BoxCollider(new Point(0, -6), new Point(roofTexture.Width, roofTexture.Height)));
             AddGameObject(roof);
         }
         private void InitializeFloor(Texture2D floorTexture)
         {
-            GameObject floor = new();
+            GameObject floor = new("border");
             floor.Add(new Components.Sprite(floorTexture, Vector2.Zero));
             floor.Add(new Components.Transform(0, _renderTarget.Height-10));
+            floor.Add(new Components.Rigidbody(Vector2.Zero, 0f));
+            floor.Add(new Components.BoxCollider(new Point(0, _renderTarget.Height-10), new Point(floorTexture.Width, floorTexture.Height)));
+
             AddGameObject(floor);
         }
 
