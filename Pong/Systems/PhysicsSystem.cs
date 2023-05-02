@@ -70,7 +70,7 @@ namespace Systems
 
             foreach(GameObject gameObject in _gameObjects.Values)
             {
-                if (gameObject.ContainsComponent<Components.Rigidbody>() && gameObject.ContainsComponent<Components.Transform>())
+                if (gameObject.ContainsComponent<Components.Rigidbody>() && gameObject.ContainsComponent<Components.Transform>() && gameObject.GetComponent<Rigidbody>().Speed > 0f)
                 {
                     movableObjects.Add(gameObject);
                 }
