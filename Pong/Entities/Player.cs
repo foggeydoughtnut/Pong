@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Entities
 {
     public class Player
     {
-        public static GameObject Create(Texture2D texture, int x, int y, Dictionary<string, Keys> controls, ushort playerNum)
+        public static Tuple<GameObject, GameObject> Create(Texture2D texture, int x, int y, Dictionary<string, Keys> controls, ushort playerNum, SpriteFont scoreFont, int scoreX, int scoreY)
         {
             float speed = 200f;
             GameObject player = new($"Player{playerNum}");
@@ -27,7 +28,17 @@ namespace Entities
 
             player.Add(keyboardInput);
 
-            return player;
+            Score score = new();
+            player.Add(score);
+
+            // Create score text
+            GameObject scoreObject = new($"Score{playerNum}");
+            scoreObject.Add(score);
+            scoreObject.Add(new Components.Text(scoreFont, ""+score.Points));
+            scoreObject.Add(new Components.Transform(scoreX, scoreY));
+
+            Tuple<GameObject, GameObject> objects = new(player, scoreObject);
+            return objects;
         }
     }
 }

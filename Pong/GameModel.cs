@@ -68,16 +68,13 @@ namespace Pong
             InitializeRoof(textures["roof"]);
             InitializeFloor(textures["floor"]);
 
-            InitializePlayerTwo(textures["player"]);
-            InitializePlayerOne(textures["player"]);
+            InitializePlayerTwo(textures["player"], fonts["scoreFont"]);
+            InitializePlayerOne(textures["player"], fonts["scoreFont"]);
 
             InitializeBall(textures["ball"]);
 
             InitializeGoalOne();
             InitializeGoalTwo();
-
-            InitializeScore1(fonts["scoreFont"]);
-            InitializeScore2(fonts["scoreFont"]);
 
         }
 
@@ -153,7 +150,7 @@ namespace Pong
             AddGameObject(floor);
         }
 
-        private void InitializePlayerOne(Texture2D playerTexture)
+        private void InitializePlayerOne(Texture2D playerTexture, SpriteFont scoreFont)
         {
             // TODO read this from a json file
             Dictionary<string, Keys> controls = new()
@@ -161,12 +158,13 @@ namespace Pong
                 {"up", Keys.W },
                 {"down", Keys.S },
             };
-            
-            GameObject player1 = Player.Create(playerTexture, _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 1);
-            AddGameObject(player1);
+
+            Tuple<GameObject, GameObject> objects = Player.Create(playerTexture, _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 1, scoreFont, _renderTarget.Width/4, _renderTarget.Height/8);
+            AddGameObject(objects.Item1);
+            AddGameObject(objects.Item2);
         }
 
-        private void InitializePlayerTwo(Texture2D playerTexture)
+        private void InitializePlayerTwo(Texture2D playerTexture, SpriteFont scoreFont)
         {
             // TODO read this from a json file
             Dictionary<string, Keys> controls = new()
@@ -175,8 +173,10 @@ namespace Pong
                 {"down", Keys.Down },
             };
 
-            GameObject player2 = Player.Create(playerTexture, 7 * _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 2);
-            AddGameObject(player2);
+            Tuple<GameObject, GameObject> objects = Player.Create(playerTexture, 7 * _renderTarget.Width / 8, _renderTarget.Height / 2, controls, 2, scoreFont, 3*_renderTarget.Width/4, _renderTarget.Height/8);
+            AddGameObject(objects.Item1);
+            AddGameObject(objects.Item2);
+
         }
 
         private void InitializeBall(Texture2D ballTexture)
@@ -195,24 +195,6 @@ namespace Pong
         {
             GameObject goal = Goal.Create(-16, 0, _renderTarget.Width / 8, _renderTarget.Height, 2);
             AddGameObject(goal);
-        }
-
-        private void InitializeScore1(SpriteFont font)
-        {
-            GameObject score1 = new("Score1");
-            score1.Add(new Components.Score());
-            score1.Add(new Components.Text(font, "0"));
-            score1.Add(new Components.Transform(_renderTarget.Width / 4, _renderTarget.Height / 8));
-            AddGameObject(score1);
-        }
-
-        private void InitializeScore2(SpriteFont font)
-        {
-            GameObject score2 = new("Score2");
-            score2.Add(new Components.Score());
-            score2.Add(new Components.Text(font, "0"));
-            score2.Add(new Components.Transform(3 * _renderTarget.Width / 4, _renderTarget.Height / 8));
-            AddGameObject(score2);
         }
         #endregion
     }

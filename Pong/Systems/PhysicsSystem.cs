@@ -106,8 +106,8 @@ namespace Systems
                                    
                                 }
                                 // TODO make a scoring system and notify that when this happens
-/*                                if (player1 != null)
-                                    player1.GetComponent<Score>().Points += 1;*/
+                                if (player1 != null)
+                                    player1.GetComponent<Score>().Points += 1;
                                 // Remove ball from scene and spawn new one in the middle
                                 _ballDestroyed(movableObject, 1);
                             }
@@ -125,8 +125,8 @@ namespace Systems
                                     }
 
                                 }
-  /*                              if (player2 != null)
-                                    player2.GetComponent<Score>().Points += 1;*/
+                                if (player2 != null)
+                                    player2.GetComponent<Score>().Points += 1;
 
 
                                 // Remove ball from scene and spawn new one in the middle
