@@ -105,7 +105,6 @@ namespace Systems
                                     }
                                    
                                 }
-                                // TODO make a scoring system and notify that when this happens
                                 if (player1 != null)
                                     player1.GetComponent<Score>().Points += 1;
                                 // Remove ball from scene and spawn new one in the middle
@@ -210,6 +209,12 @@ namespace Systems
             return movableObjects;
         }
 
+        /// <summary>
+        /// Returns if two colliders collide with each other
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private bool Collides(GameObject a, GameObject b)
         {
             Components.BoxCollider aCollider = a.GetComponent<Components.BoxCollider>();
