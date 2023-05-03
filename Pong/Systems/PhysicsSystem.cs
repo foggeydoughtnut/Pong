@@ -66,18 +66,37 @@ namespace Systems
                 {
                     if (Collides(gameObject, movableObject))
                     {
-                        if (movableObject.Name.Contains("Player"))
+                        if (movableObject.Name == "Ball")
                         {
-                            BoxCollider movableObjectCollider = movableObject.GetComponent<BoxCollider>();
+                            if (gameObject.Name.Contains("Player"))
+                            {
+                                movableObject.GetComponent<Rigidbody>().Direction.X = -movableObject.GetComponent<Rigidbody>().Direction.X;
+                                if (gameObject.Name == "Player1") // Player 1 is on the left so move the ball to the right
+                                    movableObject.GetComponent<Transform>().Position = new Vector2(gameObject.GetComponent<Transform>().Position.X + gameObject.GetComponent<BoxCollider>().Collider.Width, movableObject.GetComponent<Transform>().Position.Y);
+                                else
+                                    movableObject.GetComponent<Transform>().Position = new Vector2(gameObject.GetComponent<Transform>().Position.X - gameObject.GetComponent<BoxCollider>().Collider.Width, movableObject.GetComponent<Transform>().Position.Y);
+
+                                // TODO check the direction vector of player and ball and calculate the projection vector based on those
+                            }
+
+                            if (gameObject.Name == "border")
+                            {
+                                movableObject.GetComponent<Rigidbody>().Direction.Y = -movableObject.GetComponent<Rigidbody>().Direction.Y;
+                            }
+                        }
+
+                        if (movableObject.Name.Contains("Player") && gameObject.Name != "Ball")
+                        {
+                            BoxCollider playerCollider = movableObject.GetComponent<BoxCollider>();
                             BoxCollider gameObjectCollider = gameObject.GetComponent<BoxCollider>();
 
-                            if (movableObjectCollider.Collider.Top < gameObjectCollider.Collider.Bottom && movableObjectCollider.Collider.Bottom > gameObjectCollider.Collider.Bottom)
+                            if (playerCollider.Collider.Top < gameObjectCollider.Collider.Bottom && playerCollider.Collider.Bottom > gameObjectCollider.Collider.Bottom)
                             { // Hit bottom of roof
                                 movableObject.GetComponent<Rigidbody>().CanMoveUp = false;
                                 movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;
                                 movableObject.GetComponent<Transform>().Position = new Vector2(movableObject.GetComponent<Transform>().Position.X, gameObject.GetComponent<Transform>().Position.Y + movableObject.GetComponent<BoxCollider>().Collider.Height);
                             }
-                            else if (movableObjectCollider.Collider.Bottom > gameObjectCollider.Collider.Top && movableObjectCollider.Collider.Top < gameObjectCollider.Collider.Top)
+                            else if (playerCollider.Collider.Bottom > gameObjectCollider.Collider.Top && playerCollider.Collider.Top < gameObjectCollider.Collider.Top)
                             { // Hit top of floor
                                 movableObject.GetComponent<Rigidbody>().CanMoveDown = false;
                                 movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;

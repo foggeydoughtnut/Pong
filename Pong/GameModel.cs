@@ -38,6 +38,7 @@ namespace Pong
                 { "player", content.Load<Texture2D>("Sprites/Player") },
                 { "roof", content.Load<Texture2D>("Sprites/Roof") },
                 { "floor", content.Load<Texture2D>("Sprites/floor") },
+                { "ball", content.Load<Texture2D>("Sprites/Ball") }
 
             };
 
@@ -54,6 +55,8 @@ namespace Pong
 
             InitializePlayerTwo(textures["player"]);
             InitializePlayerOne(textures["player"]);
+
+            InitializeBall(textures["ball"]);
 
         }
 
@@ -153,7 +156,8 @@ namespace Pong
 
         private void InitializeBall(Texture2D ballTexture)
         {
-
+            GameObject ball = Ball.Create(ballTexture, _renderTarget.Width / 4, _renderTarget.Height / 2);
+            AddGameObject(ball);
         }
     }
 }
