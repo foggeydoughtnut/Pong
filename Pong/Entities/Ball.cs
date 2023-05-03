@@ -11,15 +11,19 @@ namespace Entities
 {
     public class Ball
     {
-        public static GameObject Create(Texture2D texture, int x, int y)
+        public static GameObject Create(Texture2D texture, int x, int y, float xDirection)
         {
             float speed = 200f;
             GameObject ball = new("Ball");
             ball.Add(new Components.Sprite(texture));
             ball.Add(new Components.Transform(x, y));
 
-            // TODO, make this random
-            Vector2 initialDirection = new(1, 1);
+
+            // Generate random value between -1 and 1
+            Random random = new();
+            float randomValue = (float)(random.NextDouble() * 2) - 1;
+
+            Vector2 initialDirection = new(xDirection, randomValue);
             initialDirection.Normalize();
 
             ball.Add(new Components.Rigidbody(initialDirection, speed));

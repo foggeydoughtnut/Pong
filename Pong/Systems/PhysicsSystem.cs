@@ -12,9 +12,10 @@ namespace Systems
 {
     public class PhysicsSystem : System
     {
-
-        public PhysicsSystem() : base(typeof(Transform), typeof(Rigidbody), typeof(Collider))
+        private Action<GameObject, int> _ballDestroyed;
+        public PhysicsSystem(Action<GameObject, int> ballDestroyed) : base(typeof(Transform), typeof(Rigidbody), typeof(Collider))
         {
+            _ballDestroyed = ballDestroyed;
         }
 
         public override void Update(GameTime gameTime)
@@ -89,6 +90,48 @@ namespace Systems
                             if (gameObject.Name == "border")
                             {
                                 movableObject.GetComponent<Rigidbody>().Direction.Y = -movableObject.GetComponent<Rigidbody>().Direction.Y;
+                            }
+
+                            if (gameObject.Name == "Goal1")
+                            {
+                                // Increment score for player 1
+                                GameObject player1 = null;
+                                foreach (GameObject item in movableObjects)
+                                {
+                                    if (item.Name == "Player1")
+                                    {
+                                        player1 = item;
+                                        break;
+                                    }
+                                   
+                                }
+                                // TODO make a scoring system and notify that when this happens
+/*                                if (player1 != null)
+                                    player1.GetComponent<Score>().Points += 1;*/
+                                // Remove ball from scene and spawn new one in the middle
+                                _ballDestroyed(movableObject, 1);
+                            }
+
+                            if (gameObject.Name == "Goal2")
+                            {
+                                // Increment score for player 2
+                                GameObject player2 = null;
+                                foreach (GameObject item in movableObjects)
+                                {
+                                    if (item.Name == "Player2")
+                                    {
+                                        player2 = item;
+                                        break;
+                                    }
+
+                                }
+  /*                              if (player2 != null)
+                                    player2.GetComponent<Score>().Points += 1;*/
+
+
+                                // Remove ball from scene and spawn new one in the middle
+                                _ballDestroyed(movableObject, -1);
+
                             }
                         }
 

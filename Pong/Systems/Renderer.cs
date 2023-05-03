@@ -18,8 +18,6 @@ namespace Systems
 
         public bool DEBUG_MODE = true;
 
-
-
         public Renderer(SpriteBatch spriteBatch) :
             base(typeof(Components.Sprite), typeof(Components.Transform))
         {

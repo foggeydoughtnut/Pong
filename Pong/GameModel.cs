@@ -21,6 +21,7 @@ namespace Pong
         private List<GameObject> _addThese = new();
 
         private Systems.Renderer _renderer;
+        private Systems.TextRenderer _textRenderer;
         private Systems.InputSystem _inputSystem;
         private Systems.MovementSystem _movementSystem;
         private Systems.PhysicsSystem _physicsSystem;
@@ -39,14 +40,28 @@ namespace Pong
                 { "roof", content.Load<Texture2D>("Sprites/Roof") },
                 { "floor", content.Load<Texture2D>("Sprites/floor") },
                 { "ball", content.Load<Texture2D>("Sprites/Ball") }
+            };
 
+            Dictionary<string, SpriteFont> fonts = new()
+            {
+                {"scoreFont", content.Load<SpriteFont>("Fonts/ScoreFont") },
             };
 
 
+
             _renderer = new(spriteBatch);
+            _textRenderer = new(spriteBatch);
             _inputSystem = new();
             _movementSystem = new();
-            _physicsSystem = new();
+            _physicsSystem = new((gameObject, direction) =>
+            {
+                // TODO wait 2 seconds before spawning new ball
+
+                // Remove the existing ball
+                _removeThese.Add(gameObject);
+                // Add new ball
+                _addThese.Add(Ball.Create(textures["ball"], _renderTarget.Width / 2, _renderTarget.Height / 2, direction));
+            });
 
 
             InitializeBackground(textures["background"]);
@@ -57,6 +72,12 @@ namespace Pong
             InitializePlayerOne(textures["player"]);
 
             InitializeBall(textures["ball"]);
+
+            InitializeGoalOne();
+            InitializeGoalTwo();
+
+            InitializeScore1(fonts["scoreFont"]);
+            InitializeScore2(fonts["scoreFont"]);
 
         }
 
@@ -82,11 +103,13 @@ namespace Pong
         public void Draw(GameTime gameTime)
         {
             _renderer.Update(gameTime);
+            _textRenderer.Update(gameTime);
         }
 
         private void AddGameObject(GameObject gameObject)
         {
             _renderer.Add(gameObject);
+            _textRenderer.Add(gameObject);
             _inputSystem.Add(gameObject);
             _movementSystem.Add(gameObject);
             _physicsSystem.Add(gameObject);
@@ -95,11 +118,13 @@ namespace Pong
         private void RemoveGameObject(GameObject gameObject)
         {
             _renderer.Remove(gameObject.Id);
+            _textRenderer.Remove(gameObject.Id);
             _inputSystem.Remove(gameObject.Id);
             _movementSystem.Remove(gameObject.Id);
             _physicsSystem.Remove(gameObject.Id);
         }
 
+        #region Initializing GameObjects
         private void InitializeBackground(Texture2D backgroundTexture)
         {
             GameObject background = new();
@@ -156,8 +181,39 @@ namespace Pong
 
         private void InitializeBall(Texture2D ballTexture)
         {
-            GameObject ball = Ball.Create(ballTexture, _renderTarget.Width / 4, _renderTarget.Height / 2);
+            GameObject ball = Ball.Create(ballTexture, _renderTarget.Width / 2, _renderTarget.Height / 2, 1);
             AddGameObject(ball);
         }
+
+        private void InitializeGoalOne()
+        {
+            GameObject goal = Goal.Create(7 * _renderTarget.Width / 8 + 16, 0, _renderTarget.Width / 8, _renderTarget.Height, 1);
+            AddGameObject(goal);
+        }
+
+        private void InitializeGoalTwo()
+        {
+            GameObject goal = Goal.Create(-16, 0, _renderTarget.Width / 8, _renderTarget.Height, 2);
+            AddGameObject(goal);
+        }
+
+        private void InitializeScore1(SpriteFont font)
+        {
+            GameObject score1 = new("Score1");
+            score1.Add(new Components.Score());
+            score1.Add(new Components.Text(font, "0"));
+            score1.Add(new Components.Transform(_renderTarget.Width / 4, _renderTarget.Height / 8));
+            AddGameObject(score1);
+        }
+
+        private void InitializeScore2(SpriteFont font)
+        {
+            GameObject score2 = new("Score2");
+            score2.Add(new Components.Score());
+            score2.Add(new Components.Text(font, "0"));
+            score2.Add(new Components.Transform(3 * _renderTarget.Width / 4, _renderTarget.Height / 8));
+            AddGameObject(score2);
+        }
+        #endregion
     }
 }
