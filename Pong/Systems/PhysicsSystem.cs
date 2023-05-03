@@ -82,6 +82,8 @@ namespace Systems
                                     movableObject.GetComponent<Transform>().Position = new Vector2(gameObject.GetComponent<Transform>().Position.X + gameObject.GetComponent<BoxCollider>().Collider.Width, movableObject.GetComponent<Transform>().Position.Y);
                                 else // Player 2 is on the right so move the ball to the left
                                     movableObject.GetComponent<Transform>().Position = new Vector2(gameObject.GetComponent<Transform>().Position.X - gameObject.GetComponent<BoxCollider>().Collider.Width, movableObject.GetComponent<Transform>().Position.Y);
+
+                                movableObject.GetComponent<Rigidbody>().Speed += 10;
                             }
 
                             if (gameObject.Name == "border")
