@@ -16,6 +16,8 @@ namespace Components
         public float Scale;
 
 
+
+
         public Transform(int x, int y)
         {
             Position = new Vector2(x, y);

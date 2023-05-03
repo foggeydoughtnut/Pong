@@ -38,8 +38,8 @@ namespace Systems
 
                     if (boxCollider != null)
                     {
-                        Texture2D texture = TextureCreation.CreateTexture(boxCollider.Collider.Width, boxCollider.Collider.Height);
-                        _spriteBatch.Draw(texture, boxCollider.Collider, Color.White);
+                        Texture2D texture = TextureCreation.CreateTexture((int)boxCollider.Collider.Width, (int)boxCollider.Collider.Height);
+                        _spriteBatch.Draw(texture, new Vector2(boxCollider.Collider.X, boxCollider.Collider.Y), Color.White);
                     }
                 }
             }

@@ -12,6 +12,7 @@ namespace Systems
 {
     public class PhysicsSystem : System
     {
+
         public PhysicsSystem() : base(typeof(Transform), typeof(Rigidbody), typeof(Collider))
         {
         }
@@ -31,16 +32,31 @@ namespace Systems
 
                 float amountMovedX = rb.Direction.X * rb.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 float amountMovedY = rb.Direction.Y * rb.Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                transform.Position.X += amountMovedX;
-                transform.Position.Y += amountMovedY;
 
+
+                if (!rb.CanMoveDown && rb.Direction.Y < 0) // Couldn't move down but they moved up
+                {
+                    rb.CanMoveDown = true;
+                }
+                else if (!rb.CanMoveUp && rb.Direction.Y > 0) // Couldn't move up but they moved down
+                {
+                    rb.CanMoveUp = true;
+                }
+
+
+                transform.Position.X += amountMovedX;
+
+                if (rb.CanMoveDown && rb.Direction.Y > 0 || rb.CanMoveUp && rb.Direction.Y < 0 || rb.CanMoveUp && rb.CanMoveDown)
+                {
+                    transform.Position.Y += amountMovedY;
+                }
 
 
                 BoxCollider boxCollider = gameObject.GetComponent<BoxCollider>();
 
                 if (boxCollider != null && rb.Speed != 0f)
                 {
-                    boxCollider.Collider = new(new Point((int)transform.Position.X - boxCollider.Collider.Width / 2, (int)transform.Position.Y - boxCollider.Collider.Height / 2), boxCollider.Collider.Size);
+                    boxCollider.Collider = new(new Vector2(transform.Position.X - boxCollider.Collider.Width / 2, transform.Position.Y - boxCollider.Collider.Height / 2), boxCollider.Collider.Size);
                 }
 
 
@@ -52,8 +68,24 @@ namespace Systems
                     {
                         if (movableObject.Name.Contains("Player"))
                         {
-                            movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;
-                            movableObject.GetComponent<Transform>().Position = movableObject.GetComponent<Transform>().PreviousPosition;
+                            BoxCollider movableObjectCollider = movableObject.GetComponent<BoxCollider>();
+                            BoxCollider gameObjectCollider = gameObject.GetComponent<BoxCollider>();
+
+                            if (movableObjectCollider.Collider.Top < gameObjectCollider.Collider.Bottom && movableObjectCollider.Collider.Bottom > gameObjectCollider.Collider.Bottom)
+                            { // Hit bottom of roof
+                                movableObject.GetComponent<Rigidbody>().CanMoveUp = false;
+                                movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;
+                                movableObject.GetComponent<Transform>().Position = new Vector2(movableObject.GetComponent<Transform>().Position.X, gameObject.GetComponent<Transform>().Position.Y + movableObject.GetComponent<BoxCollider>().Collider.Height);
+                            }
+                            else if (movableObjectCollider.Collider.Bottom > gameObjectCollider.Collider.Top && movableObjectCollider.Collider.Top < gameObjectCollider.Collider.Top)
+                            { // Hit top of floor
+                                movableObject.GetComponent<Rigidbody>().CanMoveDown = false;
+                                movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;
+                                movableObject.GetComponent<Transform>().Position = new Vector2(movableObject.GetComponent<Transform>().Position.X, gameObject.GetComponent<Transform>().Position.Y - gameObject.GetComponent<BoxCollider>().Collider.Height);
+                            }
+
+
+
                         }
                     }
                 }

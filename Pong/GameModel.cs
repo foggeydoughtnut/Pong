@@ -111,7 +111,7 @@ namespace Pong
             roof.Add(new Components.Sprite(roofTexture, Vector2.Zero));
             roof.Add(new Components.Transform(0, -6));
             roof.Add(new Components.Rigidbody(Vector2.Zero, 0f));
-            roof.Add(new Components.BoxCollider(new Point(0, -6), new Point(roofTexture.Width, roofTexture.Height)));
+            roof.Add(new Components.BoxCollider(new Vector2(0, -6), new Vector2(roofTexture.Width, roofTexture.Height)));
             AddGameObject(roof);
         }
         private void InitializeFloor(Texture2D floorTexture)
@@ -120,7 +120,7 @@ namespace Pong
             floor.Add(new Components.Sprite(floorTexture, Vector2.Zero));
             floor.Add(new Components.Transform(0, _renderTarget.Height-10));
             floor.Add(new Components.Rigidbody(Vector2.Zero, 0f));
-            floor.Add(new Components.BoxCollider(new Point(0, _renderTarget.Height-10), new Point(floorTexture.Width, floorTexture.Height)));
+            floor.Add(new Components.BoxCollider(new Vector2(0, _renderTarget.Height - 10), new Vector2(floorTexture.Width, floorTexture.Height)));
 
             AddGameObject(floor);
         }

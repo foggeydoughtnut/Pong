@@ -4,24 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utilities;
 
 namespace Components
 {
     public class BoxCollider : Collider
     {
-        public Rectangle Collider;
+        public MyRectangle Collider;
 
-        public BoxCollider(Point location, Point size) 
+        public BoxCollider(Vector2 location, Vector2 size) 
         {
             Collider = new(location, size);
         }
 
-        public BoxCollider(int x, int y, int width, int height) 
-        {
-            Collider = new(x, y, width, height); 
-        }
-
-        public BoxCollider(Rectangle collider) 
+        public BoxCollider(MyRectangle collider) 
         {
             Collider = collider;
         }
