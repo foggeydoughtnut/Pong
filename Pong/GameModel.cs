@@ -77,7 +77,10 @@ namespace Pong
             InitializePlayerTwo(textures["player"], fonts["scoreFont"]);
             InitializePlayerOne(textures["player"], fonts["scoreFont"]);
 
-            InitializeBall(textures["ball"]);
+            InitializeTimerEvent(2f, () =>
+            {
+                _addThese.Add(Ball.Create(textures["ball"], _renderTarget.Width / 2, _renderTarget.Height / 2, 1));
+            });
 
             InitializeGoalOne();
             InitializeGoalTwo();
