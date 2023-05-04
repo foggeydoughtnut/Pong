@@ -16,7 +16,7 @@ namespace Systems
     {
         private readonly SpriteBatch _spriteBatch;
 
-        public bool DEBUG_MODE = true;
+        public bool DEBUG_MODE = false;
 
         public Renderer(SpriteBatch spriteBatch) :
             base(typeof(Components.Sprite), typeof(Components.Transform))

@@ -13,7 +13,7 @@ namespace Entities
     {
         public static GameObject Create(Texture2D texture, int x, int y, float xDirection)
         {
-            float speed = 200f;
+            float speed = 130f;
             GameObject ball = new("Ball");
             ball.Add(new Components.Sprite(texture));
             ball.Add(new Components.Transform(x, y));

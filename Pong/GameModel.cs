@@ -25,6 +25,7 @@ namespace Pong
         private Systems.InputSystem _inputSystem;
         private Systems.MovementSystem _movementSystem;
         private Systems.PhysicsSystem _physicsSystem;
+        private Systems.TimerSystem _timerSystem;
 
         public GameModel(RenderTarget2D renderTarget)
         {
@@ -53,14 +54,19 @@ namespace Pong
             _textRenderer = new(spriteBatch);
             _inputSystem = new();
             _movementSystem = new();
+            _timerSystem = new((gameObject) =>
+            { // This is the callback that happens when the timer ends to remove the timer
+                _removeThese.Add(gameObject);
+            });
             _physicsSystem = new((gameObject, direction) =>
             {
-                // TODO wait 2 seconds before spawning new ball
-
                 // Remove the existing ball
                 _removeThese.Add(gameObject);
                 // Add new ball
-                _addThese.Add(Ball.Create(textures["ball"], _renderTarget.Width / 2, _renderTarget.Height / 2, direction));
+                InitializeTimerEvent(2f, () =>
+                {
+                    _addThese.Add(Ball.Create(textures["ball"], _renderTarget.Width / 2, _renderTarget.Height / 2, direction));
+                });
             });
 
 
@@ -83,6 +89,7 @@ namespace Pong
             _inputSystem.Update(gameTime);
             _movementSystem.Update(gameTime);
             _physicsSystem.Update(gameTime);
+            _timerSystem.Update(gameTime);
 
             foreach (GameObject gameObject in _removeThese)
             {
@@ -110,6 +117,7 @@ namespace Pong
             _inputSystem.Add(gameObject);
             _movementSystem.Add(gameObject);
             _physicsSystem.Add(gameObject);
+            _timerSystem.Add(gameObject);
         }
 
         private void RemoveGameObject(GameObject gameObject)
@@ -119,6 +127,7 @@ namespace Pong
             _inputSystem.Remove(gameObject.Id);
             _movementSystem.Remove(gameObject.Id);
             _physicsSystem.Remove(gameObject.Id);
+            _timerSystem.Remove(gameObject.Id);
         }
 
         #region Initializing GameObjects
@@ -187,14 +196,21 @@ namespace Pong
 
         private void InitializeGoalOne()
         {
-            GameObject goal = Goal.Create(7 * _renderTarget.Width / 8 + 16, 0, _renderTarget.Width / 8, _renderTarget.Height, 1);
+            GameObject goal = Goal.Create(7 * _renderTarget.Width / 8 + 24, 0, _renderTarget.Width / 8, _renderTarget.Height, 1);
             AddGameObject(goal);
         }
 
         private void InitializeGoalTwo()
         {
-            GameObject goal = Goal.Create(-16, 0, _renderTarget.Width / 8, _renderTarget.Height, 2);
+            GameObject goal = Goal.Create(-24, 0, _renderTarget.Width / 8, _renderTarget.Height, 2);
             AddGameObject(goal);
+        }
+
+        private void InitializeTimerEvent(float delay, Action onTimerEnd)
+        {
+            GameObject timerObject = new();
+            timerObject.Add(new Components.Timer(0f, delay, onTimerEnd));
+            AddGameObject(timerObject);
         }
         #endregion
     }
