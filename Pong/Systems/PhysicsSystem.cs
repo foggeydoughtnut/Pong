@@ -25,6 +25,8 @@ namespace Systems
 
             foreach (GameObject gameObject in _gameObjects.Values)
             {
+
+                #region Move objects
                 Rigidbody rb = gameObject.GetComponent<Rigidbody>();
 
                 Transform transform = gameObject.GetComponent<Transform>();
@@ -59,6 +61,7 @@ namespace Systems
                 {
                     boxCollider.Collider = new(new Vector2(transform.Position.X - boxCollider.Collider.Width / 2, transform.Position.Y - boxCollider.Collider.Height / 2), boxCollider.Collider.Size);
                 }
+                #endregion
 
 
 
@@ -67,6 +70,7 @@ namespace Systems
                 {
                     if (Collides(gameObject, movableObject))
                     {
+                        #region Ball collision
                         if (movableObject.Name == "Ball")
                         {
                             if (gameObject.Name.Contains("Player"))
@@ -84,7 +88,7 @@ namespace Systems
                                 else // Player 2 is on the right so move the ball to the left
                                     movableObject.GetComponent<Transform>().Position = new Vector2(gameObject.GetComponent<Transform>().Position.X - gameObject.GetComponent<BoxCollider>().Collider.Width, movableObject.GetComponent<Transform>().Position.Y);
 
-                                movableObject.GetComponent<Rigidbody>().Speed += 10;
+                                movableObject.GetComponent<Rigidbody>().Speed += 15;
                             }
 
                             if (gameObject.Name == "border")
@@ -133,7 +137,9 @@ namespace Systems
 
                             }
                         }
+                        #endregion
 
+                        #region Player collision no ball
                         if (movableObject.Name.Contains("Player") && gameObject.Name != "Ball")
                         {
                             BoxCollider playerCollider = movableObject.GetComponent<BoxCollider>();
@@ -151,6 +157,7 @@ namespace Systems
                                 movableObject.GetComponent<Rigidbody>().Direction = Vector2.Zero;
                                 movableObject.GetComponent<Transform>().Position = new Vector2(movableObject.GetComponent<Transform>().Position.X, gameObject.GetComponent<Transform>().Position.Y - gameObject.GetComponent<BoxCollider>().Collider.Height);
                             }
+                            #endregion
 
 
 
