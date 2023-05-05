@@ -1,6 +1,7 @@
 ﻿using Components;
 using Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -48,6 +49,14 @@ namespace Pong
                 {"scoreFont", content.Load<SpriteFont>("Fonts/ScoreFont") },
             };
 
+            Dictionary<string, SoundEffect> soundEffects = new()
+            {
+                { "wallBounce", content.Load<SoundEffect>("SoundEffects/WallBounce") },
+                { "playerBounce", content.Load<SoundEffect>("SoundEffects/PlayerBounce") },
+                { "score", content.Load<SoundEffect>("SoundEffects/Score") },
+            };
+
+
 
 
             _renderer = new(spriteBatch);
@@ -67,6 +76,20 @@ namespace Pong
                 {
                     _addThese.Add(Ball.Create(textures["ball"], _renderTarget.Width / 2, _renderTarget.Height / 2, direction));
                 });
+            }, (gameObject) =>
+            {
+                if (gameObject.Name == "border")
+                {
+                    PlaySoundEffect(soundEffects["wallBounce"]);
+                }
+                else if (gameObject.Name.Contains("Player"))
+                {
+                    PlaySoundEffect(soundEffects["playerBounce"]);
+                }
+                else if (gameObject.Name.Contains("Goal"))
+                {
+                    PlaySoundEffect(soundEffects["score"]);
+                }
             });
 
 
@@ -191,12 +214,6 @@ namespace Pong
 
         }
 
-        private void InitializeBall(Texture2D ballTexture)
-        {
-            GameObject ball = Ball.Create(ballTexture, _renderTarget.Width / 2, _renderTarget.Height / 2, 1);
-            AddGameObject(ball);
-        }
-
         private void InitializeGoalOne()
         {
             GameObject goal = Goal.Create(7 * _renderTarget.Width / 8 + 24, 0, _renderTarget.Width / 8, _renderTarget.Height, 1);
@@ -216,5 +233,10 @@ namespace Pong
             AddGameObject(timerObject);
         }
         #endregion
+
+        private void PlaySoundEffect(SoundEffect soundEffect)
+        {
+            soundEffect.Play();
+        }
     }
 }

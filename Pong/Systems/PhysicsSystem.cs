@@ -13,9 +13,11 @@ namespace Systems
     public class PhysicsSystem : System
     {
         private Action<GameObject, int> _ballDestroyed;
-        public PhysicsSystem(Action<GameObject, int> ballDestroyed) : base(typeof(Transform), typeof(Rigidbody), typeof(Collider))
+        private Action<GameObject> _playSoundEffect;
+        public PhysicsSystem(Action<GameObject, int> ballDestroyed, Action<GameObject> playSoundEffect) : base(typeof(Transform), typeof(Rigidbody), typeof(Collider))
         {
             _ballDestroyed = ballDestroyed;
+            _playSoundEffect = playSoundEffect;
         }
 
         public override void Update(GameTime gameTime)
@@ -73,9 +75,10 @@ namespace Systems
                         #region Ball collision
                         if (movableObject.Name == "Ball")
                         {
+                            _playSoundEffect(gameObject);
+
                             if (gameObject.Name.Contains("Player"))
                             {
-                                // TODO check the direction vector of player and ball and calculate the projection vector based on those
                                 float yDirection = CalculateBallBounceYDirection(gameObject.GetComponent<Rigidbody>().Direction, movableObject.GetComponent<Rigidbody>().Direction, gameObject.GetComponent<Transform>().Position, movableObject.GetComponent<Transform>().Position, gameObject.GetComponent<BoxCollider>().Collider.Height/2);
 
                                 Vector2 direction = new(-movableObject.GetComponent<Rigidbody>().Direction.X, yDirection);

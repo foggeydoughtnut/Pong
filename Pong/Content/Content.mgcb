@@ -27,6 +27,24 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/ScoreFont.spritefont
 
+#begin SoundEffects/PlayerBounce.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/PlayerBounce.ogg
+
+#begin SoundEffects/Score.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/Score.ogg
+
+#begin SoundEffects/WallBounce.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffects/WallBounce.ogg
+
 #begin Sprites/Background.png
 /importer:TextureImporter
 /processor:TextureProcessor
